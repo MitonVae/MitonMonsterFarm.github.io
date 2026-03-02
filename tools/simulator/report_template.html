@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>农场游戏平衡模拟报告</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        
+        h1, h2, h3, h4 {
+            color: #2c3e50;
+        }
+        
+        .header {
+            background-color: #34495e;
+            color: white;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .test-section {
+            background-color: white;
+            border-radius: 5px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .test-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        
+        .test-name {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: #2980b9;
+        }
+        
+        .score-badge {
+            padding: 5px 10px;
+            border-radius: 15px;
+            color: white;
+            font-weight: bold;
+        }
+        
+        .score-high {
+            background-color: #27ae60;
+        }
+        
+        .score-medium {
+            background-color: #f39c12;
+        }
+        
+        .score-low {
+            background-color: #c0392b;
+        }
+        
+        .data-section {
+            margin: 20px 0;
+        }
+        
+        .data-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+        
+        .data-card {
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            padding: 15px;
+            border-left: 5px solid #3498db;
+        }
+        
+        .resources-section {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 15px 0;
+        }
+        
+        .resource-card {
+            background-color: #f8f9fa;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .resource-card.coins {
+            border-left: 3px solid #f1c40f;
+        }
+        
+        .resource-card.food {
+            border-left: 3px solid #2ecc71;
+        }
+        
+        .resource-card.materials {
+            border-left: 3px solid #95a5a6;
+        }
+        
+        .resource-card.research {
+            border-left: 3px solid #3498db;
+        }
+        
+        .resource-value {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+        
+        .scores-section {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 10px;
+            margin: 20px 0;
+        }
+        
+        .score-card {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .score-value {
+            font-size: 1.8em;
+            font-weight: bold;
+            margin: 5px 0;
+        }
+        
+        .recommendations {
+            background-color: #eef7fa;
+            padding: 15px;
+            border-radius: 5px;
+            border-left: 5px solid #2980b9;
+            margin: 20px 0;
+        }
+        
+        .recommendation-item {
+            margin: 8px 0;
+        }
+        
+        .time-nodes {
+            margin: 20px 0;
+        }
+        
+        .time-node-item {
+            display: flex;
+            margin: 10px 0;
+            padding: 8px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+        
+        .time-label {
+            flex: 0 0 150px;
+            font-weight: bold;
+        }
+        
+        .time-value {
+            flex: 0 0 100px;
+        }
+        
+        .resources {
+            flex: 1;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            color: #7f8c8d;
+            font-size: 0.9em;
+        }
+        
+        @media (max-width: 768px) {
+            .data-grid, .resources-section, .scores-section {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>农场游戏平衡模拟报告</h1>
+        <p>生成时间：<span id="report-date">2023-11-30</span></p>
+    </div>
+    
+    <div class="test-section">
+        <div class="test-header">
+            <div class="test-name">默认平衡测试</div>
+            <div class="score-badge score-medium">平衡评分：6/10</div>
+        </div>
+        
+        <div class="data-section">
+            <h3>模拟概况</h3>
+            <div class="data-grid">
+                <div class="data-card">
+                    <strong>模拟时长：</strong> 24小时 (86400秒)<br>
+                    <strong>模拟策略：</strong> 最优策略 (optimal)<br>
+                    <strong>模拟速度：</strong> 10倍速<br>
+                </div>
+                <div class="data-card">
+                    <strong>最终游戏阶段：</strong> 阶段3 (中级领主)<br>
+                    <strong>怪兽总数：</strong> 8只<br>
+                    <strong>总收获次数：</strong> 187次<br>
+                    <strong>总探索次数：</strong> 12次<br>
+                </div>
+            </div>
+            
+            <h3>最终资源状态</h3>
+            <div class="resources-section">
+                <div class="resource-card coins">
+                    <div>金币</div>
+                    <div class="resource-value">1250</div>
+                    <div>增长率: +18%/小时</div>
+                </div>
+                <div class="resource-card food">
+                    <div>食物</div>
+                    <div class="resource-value">420</div>
+                    <div>增长率: +12%/小时</div>
+                </div>
+                <div class="resource-card materials">
+                    <div>材料</div>
+                    <div class="resource-value">135</div>
+                    <div>增长率: +8%/小时</div>
+                </div>
+                <div class="resource-card research">
+                    <div>研究点</div>
+                    <div class="resource-value">45</div>
+                    <div>增长率: +5%/小时</div>
+                </div>
+            </div>
+            
+            <h3>平衡性评分</h3>
+            <div class="scores-section">
+                <div class="score-card">
+                    <div>资源平衡</div>
+                    <div class="score-value" style="color:#f39c12">6/10</div>
+                </div>
+                <div class="score-card">
+                    <div>游戏进程</div>
+                    <div class="score-value" style="color:#27ae60">7/10</div>
+                </div>
+                <div class="score-card">
+                    <div>怪兽效益</div>
+                    <div class="score-value" style="color:#f39c12">5/10</div>
+                </div>
+                <div class="score-card">
+                    <div>总体平衡</div>
+                    <div class="score-value" style="color:#f39c12">6/10</div>
+                </div>
+            </div>
+            
+            <div class="recommendations">
+                <h3>平衡性建议</h3>
+                <div class="recommendation-item">1. 食物波动过大。建议：调整作物生长周期，使产出更稳定。</div>
+                <div class="recommendation-item">2. 怪兽维护成本合理，但产出效益可提高。建议：适当提升怪兽的农田加成效果。</div>
+                <div class="recommendation-item">3. 游戏进程良好，但从阶段2到阶段3的时间略长。建议：稍微降低阶段3的解锁条件。</div>
+            </div>
+            
+            <div class="time-nodes">
+                <h3>关键时间节点</h3>
+                <div class="time-node-item">
+                    <div class="time-label">开局</div>
+                    <div class="time-value">0秒</div>
+                    <div class="resources">金币: 50, 食物: 30, 材料: 0, 研究点: 0</div>
+                </div>
+                <div class="time-node-item">
+                    <div class="time-label">阶段2：初级牧主</div>
+                    <div class="time-value">10800秒</div>
+                    <div class="resources">金币: 320, 食物: 180, 材料: 45, 研究点: 10</div>
+                </div>
+                <div class="time-node-item">
+                    <div class="time-label">阶段3：中级领主</div>
+                    <div class="time-value">46200秒</div>
+                    <div class="resources">金币: 850, 食物: 310, 材料: 95, 研究点: 30</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="test-section">
+        <div class="test-header">
+            <div class="test-name">降低怪兽消耗测试</div>
+            <div class="score-badge score-high">平衡评分：8/10</div>
+        </div>
+        
+        <div class="data-section">
+            <h3>模拟概况</h3>
+            <div class="data-grid">
+                <div class="data-card">
+                    <strong>模拟时长：</strong> 24小时 (86400秒)<br>
+                    <strong>模拟策略：</strong> 最优策略 (optimal)<br>
+                    <strong>模拟速度：</strong> 10倍速<br>
+                </div>
+                <div class="data-card">
+                    <strong>最终游戏阶段：</strong> 阶段4 (高级庄主)<br>
+                    <strong>怪兽总数：</strong> 12只<br>
+                    <strong>总收获次数：</strong> 235次<br>
+                    <strong>总探索次数：</strong> 18次<br>
+                </div>
+            </div>
+            
+            <h3>最终资源状态</h3>
+            <div class="resources-section">
+                <div class="resource-card coins">
+                    <div>金币</div>
+                    <div class="resource-value">1580</div>
+                    <div>增长率: +22%/小时</div>
+                </div>
+                <div class="resource-card food">
+                    <div>食物</div>
+                    <div class="resource-value">680</div>
+                    <div>增长率: +16%/小时</div>
+                </div>
+                <div class="resource-card materials">
+                    <div>材料</div>
+                    <div class="resource-value">220</div>
+                    <div>增长率: +10%/小时</div>
+                </div>
+                <div class="resource-card research">
+                    <div>研究点</div>
+                    <div class="resource-value">85</div>
+                    <div>增长率: +7%/小时</div>
+                </div>
+            </div>
+            
+            <h3>平衡性评分</h3>
+            <div class="scores-section">
+                <div class="score-card">
+                    <div>资源平衡</div>
+                    <div class="score-value" style="color:#27ae60">8/10</div>
+                </div>
+                <div class="score-card">
+                    <div>游戏进程</div>
+                    <div class="score-value" style="color:#27ae60">8/10</div>
+                </div>
+                <div class="score-card">
+                    <div>怪兽效益</div>
+                    <div class="score-value" style="color:#27ae60">7/10</div>
+                </div>
+                <div class="score-card">
+                    <div>总体平衡</div>
+                    <div class="score-value" style="color:#27ae60">8/10</div>
+                </div>
+            </div>
+            
+            <div class="recommendations">
+                <h3>平衡性建议</h3>
+                <div class="recommendation-item">1. 整体平衡性良好。降低怪兽维护成本确实提高了游戏进程和资源平衡。</div>
+                <div class="recommendation-item">2. 后期阶段可能进展过快，建议增加阶段4到阶段5的解锁难度。</div>
+                <div class="recommendation-item">3. 游戏进程现在合理，但需注意长期游戏可能因资源过剩而失去挑战性。</div>
+            </div>
+            
+            <!-- 此处可以继续添加更多测试结果 -->
+        </div>
+    </div>
+    
+    <footer>
+        农场游戏平衡模拟系统 &copy; 2023 | 此报告由自动化平衡测试生成
+    </footer>
+    
+    <script>
+        // 更新报告生成日期
+        document.getElementById('report-date').textContent = new Date().toISOString().split('T')[0];
+    </script>
+</body>
+</html>
