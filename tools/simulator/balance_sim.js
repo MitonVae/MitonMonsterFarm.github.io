@@ -354,6 +354,44 @@ class BalanceSimulator {
     
     // 内部方法：记录数据
     _logData(time) {
+        // 统计怪兽品质和等级信息
+        const monsterStats = {
+            count: this.gameState.monsters.length,
+            byRarity: {
+                common: 0,
+                uncommon: 0,
+                rare: 0,
+                epic: 0,
+                legendary: 0
+            },
+            byLevel: {
+                '1': 0,
+                '2': 0,
+                '3': 0,
+                '4': 0,
+                '5': 0
+            },
+            types: {}
+        };
+        
+        // 计算怪兽统计数据
+        this.gameState.monsters.forEach(monster => {
+            const typeData = monsterTypes[monster.type];
+            if (typeData) {
+                const rarity = typeData.rarity || 'common';
+                monsterStats.byRarity[rarity]++;
+                
+                const level = monster.level || 1;
+                monsterStats.byLevel[level] = (monsterStats.byLevel[level] || 0) + 1;
+                
+                // 按类型统计
+                if (!monsterStats.types[monster.type]) {
+                    monsterStats.types[monster.type] = 0;
+                }
+                monsterStats.types[monster.type]++;
+            }
+        });
+        
         const entry = {
             time: time,
             realTime: time / this.simConfig.simSpeed,
@@ -364,7 +402,8 @@ class BalanceSimulator {
                 materials: this.gameState.materials,
                 research: this.gameState.research
             },
-            monsters: this.gameState.monsters.length,
+            monsterDetail: monsterStats,  // 添加详细怪兽统计
+            monsters: this.gameState.monsters.length,  // 保留原有计数以兼容
             harvests: this.gameState.totalHarvests,
             explorations: this.gameState.totalExplorations
         };
@@ -374,12 +413,56 @@ class BalanceSimulator {
     
     // 记录特定时间节点数据
     _recordTimeNode(label) {
+        // 统计怪兽品质和等级信息
+        const monsterStats = {
+            count: this.gameState.monsters.length,
+            byRarity: {
+                common: 0,
+                uncommon: 0,
+                rare: 0,
+                epic: 0,
+                legendary: 0
+            },
+            byLevel: {
+                '1': 0,
+                '2': 0,
+                '3': 0,
+                '4': 0,
+                '5': 0
+            },
+            types: {}
+        };
+        
+        // 计算怪兽统计数据
+        this.gameState.monsters.forEach(monster => {
+            const typeData = monsterTypes[monster.type];
+            if (typeData) {
+                const rarity = typeData.rarity || 'common';
+                monsterStats.byRarity[rarity]++;
+                
+                const level = monster.level || 1;
+                monsterStats.byLevel[level] = (monsterStats.byLevel[level] || 0) + 1;
+                
+                // 按类型统计
+                if (!monsterStats.types[monster.type]) {
+                    monsterStats.types[monster.type] = 0;
+                }
+                monsterStats.types[monster.type]++;
+            }
+        });
+        
         const data = {
             label: label,
             time: this.gameState.gameTime,
             realTime: this.gameState.realTime,
             gameStage: this.gameState.gameStage,
-            resources: { ...this.gameState.resources },
+            resources: { 
+                coins: this.gameState.coins,
+                food: this.gameState.food,
+                materials: this.gameState.materials,
+                research: this.gameState.research
+            },
+            monsterDetail: monsterStats,  // 详细怪兽统计
             monsters: this.gameState.monsters.length,
             harvests: this.gameState.totalHarvests,
             explorations: this.gameState.totalExplorations

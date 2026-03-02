@@ -281,16 +281,77 @@
                     <div class="time-label">开局</div>
                     <div class="time-value">0秒</div>
                     <div class="resources">金币: 50, 食物: 30, 材料: 0, 研究点: 0</div>
+                    <div class="monster-info">怪兽: 0只</div>
                 </div>
                 <div class="time-node-item">
                     <div class="time-label">阶段2：初级牧主</div>
                     <div class="time-value">10800秒</div>
                     <div class="resources">金币: 320, 食物: 180, 材料: 45, 研究点: 10</div>
+                    <div class="monster-info">
+                        怪兽: 2只
+                        <span class="monster-detail">
+                            (普通: 2, 优良: 0, 稀有: 0) 
+                            [1级: 2, 2级: 0]
+                        </span>
+                    </div>
                 </div>
                 <div class="time-node-item">
                     <div class="time-label">阶段3：中级领主</div>
                     <div class="time-value">46200秒</div>
                     <div class="resources">金币: 850, 食物: 310, 材料: 95, 研究点: 30</div>
+                    <div class="monster-info">
+                        怪兽: 5只
+                        <span class="monster-detail">
+                            (普通: 3, 优良: 2, 稀有: 0) 
+                            [1级: 3, 2级: 2]
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="monster-progression">
+                <h3>怪兽发展曲线</h3>
+                <div class="data-grid">
+                    <div class="data-card">
+                        <strong>怪兽数量增长:</strong>
+                        <ul>
+                            <li>3小时: 2只</li>
+                            <li>6小时: 3只</li>
+                            <li>12小时: 5只</li>
+                            <li>18小时: 7只</li>
+                            <li>24小时: 8只</li>
+                        </ul>
+                    </div>
+                    <div class="data-card">
+                        <strong>怪兽品质分布 (24小时):</strong>
+                        <ul>
+                            <li>普通: 5只</li>
+                            <li>优良: 2只</li>
+                            <li>稀有: 1只</li>
+                            <li>史诗: 0只</li>
+                            <li>传说: 0只</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="data-grid">
+                    <div class="data-card">
+                        <strong>怪兽等级分布 (24小时):</strong>
+                        <ul>
+                            <li>1级: 4只</li>
+                            <li>2级: 3只</li>
+                            <li>3级: 1只</li>
+                            <li>4级: 0只</li>
+                            <li>5级: 0只</li>
+                        </ul>
+                    </div>
+                    <div class="data-card">
+                        <strong>怪兽类型分布:</strong>
+                        <ul>
+                            <li>史莱姆: 3只</li>
+                            <li>哥布林: 3只</li>
+                            <li>嫩芽精: 2只</li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
@@ -377,9 +438,237 @@
         农场游戏平衡模拟系统 &copy; 2023 | 此报告由自动化平衡测试生成
     </footer>
     
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         // 更新报告生成日期
         document.getElementById('report-date').textContent = new Date().toISOString().split('T')[0];
+        
+        // 模拟图表数据 - 在实际报告中，这些数据会由模拟器提供
+        const timeLabels = ['开局', '3小时', '6小时', '9小时', '12小时', '15小时', '18小时', '21小时', '24小时'];
+        
+        // 怪兽数量数据
+        const monsterCountData = [0, 2, 3, 4, 5, 6, 7, 8, 8];
+        
+        // 怪兽品质数据
+        const monsterRarityData = {
+            common: [0, 2, 3, 3, 4, 4, 5, 5, 5],
+            uncommon: [0, 0, 0, 1, 1, 1, 1, 2, 2],
+            rare: [0, 0, 0, 0, 0, 1, 1, 1, 1],
+            epic: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            legendary: [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        };
+        
+        // 怪兽等级数据
+        const monsterLevelData = {
+            level1: [0, 2, 3, 4, 5, 5, 5, 4, 4],
+            level2: [0, 0, 0, 0, 0, 1, 2, 3, 3],
+            level3: [0, 0, 0, 0, 0, 0, 0, 1, 1],
+            level4: [0, 0, 0, 0, 0, 0, 0, 0, 0],
+            level5: [0, 0, 0, 0, 0, 0, 0, 0, 0]
+        };
+
+        // 等待文档加载完成
+        document.addEventListener('DOMContentLoaded', function() {
+            // 绘制怪兽数量趋势图
+            const monsterCountCtx = document.createElement('canvas');
+            monsterCountCtx.id = 'monsterCountChart';
+            document.querySelector('.monster-progression').appendChild(monsterCountCtx);
+            
+            new Chart(monsterCountCtx, {
+                type: 'line',
+                data: {
+                    labels: timeLabels,
+                    datasets: [{
+                        label: '怪兽总数',
+                        data: monsterCountData,
+                        backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                        borderColor: 'rgba(54, 162, 235, 1)',
+                        borderWidth: 2,
+                        tension: 0.3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '怪兽数量'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: '游戏时间'
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '怪兽数量变化趋势'
+                        }
+                    }
+                }
+            });
+            
+            // 绘制怪兽品质分布趋势图
+            const rarityCtx = document.createElement('canvas');
+            rarityCtx.id = 'rarityChart';
+            document.querySelector('.monster-progression').appendChild(rarityCtx);
+            
+            new Chart(rarityCtx, {
+                type: 'line',
+                data: {
+                    labels: timeLabels,
+                    datasets: [
+                        {
+                            label: '普通',
+                            data: monsterRarityData.common,
+                            borderColor: '#95a5a6',
+                            backgroundColor: 'rgba(149, 165, 166, 0.2)',
+                            borderWidth: 2,
+                            tension: 0.3
+                        },
+                        {
+                            label: '优良',
+                            data: monsterRarityData.uncommon,
+                            borderColor: '#3498db',
+                            backgroundColor: 'rgba(52, 152, 219, 0.2)',
+                            borderWidth: 2,
+                            tension: 0.3
+                        },
+                        {
+                            label: '稀有',
+                            data: monsterRarityData.rare,
+                            borderColor: '#9b59b6',
+                            backgroundColor: 'rgba(155, 89, 182, 0.2)',
+                            borderWidth: 2,
+                            tension: 0.3
+                        },
+                        {
+                            label: '史诗',
+                            data: monsterRarityData.epic,
+                            borderColor: '#f39c12',
+                            backgroundColor: 'rgba(243, 156, 18, 0.2)',
+                            borderWidth: 2,
+                            tension: 0.3
+                        },
+                        {
+                            label: '传说',
+                            data: monsterRarityData.legendary,
+                            borderColor: '#e74c3c',
+                            backgroundColor: 'rgba(231, 76, 60, 0.2)',
+                            borderWidth: 2,
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '怪兽数量'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: '游戏时间'
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '怪兽品质分布趋势'
+                        }
+                    }
+                }
+            });
+            
+            // 绘制怪兽等级分布趋势图
+            const levelCtx = document.createElement('canvas');
+            levelCtx.id = 'levelChart';
+            document.querySelector('.monster-progression').appendChild(levelCtx);
+            
+            new Chart(levelCtx, {
+                type: 'line',
+                data: {
+                    labels: timeLabels,
+                    datasets: [
+                        {
+                            label: '1级',
+                            data: monsterLevelData.level1,
+                            borderColor: '#27ae60',
+                            backgroundColor: 'rgba(39, 174, 96, 0.2)',
+                            borderWidth: 2,
+                            tension: 0.3
+                        },
+                        {
+                            label: '2级',
+                            data: monsterLevelData.level2,
+                            borderColor: '#2980b9',
+                            backgroundColor: 'rgba(41, 128, 185, 0.2)',
+                            borderWidth: 2,
+                            tension: 0.3
+                        },
+                        {
+                            label: '3级',
+                            data: monsterLevelData.level3,
+                            borderColor: '#8e44ad',
+                            backgroundColor: 'rgba(142, 68, 173, 0.2)',
+                            borderWidth: 2,
+                            tension: 0.3
+                        },
+                        {
+                            label: '4级',
+                            data: monsterLevelData.level4,
+                            borderColor: '#d35400',
+                            backgroundColor: 'rgba(211, 84, 0, 0.2)',
+                            borderWidth: 2,
+                            tension: 0.3
+                        },
+                        {
+                            label: '5级',
+                            data: monsterLevelData.level5,
+                            borderColor: '#c0392b',
+                            backgroundColor: 'rgba(192, 57, 43, 0.2)',
+                            borderWidth: 2,
+                            tension: 0.3
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            title: {
+                                display: true,
+                                text: '怪兽数量'
+                            }
+                        },
+                        x: {
+                            title: {
+                                display: true,
+                                text: '游戏时间'
+                            }
+                        }
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: '怪兽等级分布趋势'
+                        }
+                    }
+                }
+            });
+        });
     </script>
 </body>
 </html>
