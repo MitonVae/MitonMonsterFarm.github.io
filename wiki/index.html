@@ -124,20 +124,26 @@
   <div id="app">Loading…</div>
 
   <script>
-    /* ── 自动判断是否运行在 GitHub Pages 环境 ── */
+    /* ── 自动判断是否运行在 GitHub Pages 环境或本地环境 ── */
     var _isGhPages = location.hostname.indexOf('github.io') !== -1;
+    var _isLocal = location.protocol === 'file:';
     var _basePath  = _isGhPages ? '/MonsterFarm/wiki/' : './';
 
     window.$docsify = {
       name: '🌾 怪兽农场 Wiki',
       nameLink: _isGhPages ? '/MonsterFarm/wiki/' : './',
       basePath: _basePath,
+      // 在本地运行时不使用相对路径，防止404错误
+      relativePath: !_isLocal,
       repo: 'https://github.com/MitonVae/MonsterFarm',
       loadSidebar: '_sidebar.md',
       loadNavbar: false,
       subMaxLevel: 3,
       auto2top: true,
-      relativePath: true,
+      // 本地文件模式
+      requestHeaders: {
+        'cache-control': 'no-cache'
+      },
 
       // 搜索插件
       search: {
