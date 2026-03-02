@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>本地Wiki启动器 - 怪兽农场</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+      background: #f9f9f9;
+    }
+    h1 {
+      color: #46d164;
+      border-bottom: 2px solid #46d164;
+      padding-bottom: 10px;
+    }
+    .container {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .method {
+      margin-bottom: 30px;
+      border-left: 4px solid #46d164;
+      padding-left: 15px;
+    }
+    code {
+      background: #f3f3f3;
+      padding: 2px 5px;
+      border-radius: 3px;
+      font-family: monospace;
+    }
+    .button {
+      display: inline-block;
+      background: #46d164;
+      color: white;
+      padding: 10px 15px;
+      border-radius: 4px;
+      text-decoration: none;
+      font-weight: bold;
+      margin-top: 10px;
+    }
+    .button:hover {
+      background: #3bb052;
+    }
+    .note {
+      background: #fff8e1;
+      border-left: 4px solid #ffca28;
+      padding: 10px 15px;
+      margin: 20px 0;
+      border-radius: 0 4px 4px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🌾 怪兽农场 Wiki 本地启动器</h1>
+    
+    <p>您的Wiki使用了<strong>Docsify</strong>框架构建，需要通过HTTP服务器来正确运行。以下是几种查看Wiki的方法：</p>
+    
+    <div class="method">
+      <h2>方法1：使用Node.js的http-server（推荐）</h2>
+      <p>如果您已安装Node.js，请按照以下步骤操作：</p>
+      <ol>
+        <li>全局安装http-server：<code>npm install -g http-server</code></li>
+        <li>进入wiki目录：<code>cd 您的wiki目录路径</code></li>
+        <li>启动服务器：<code>http-server</code></li>
+        <li>在浏览器中访问：<code>http://localhost:8080</code></li>
+      </ol>
+    </div>
+    
+    <div class="method">
+      <h2>方法2：使用Python的简易HTTP服务器</h2>
+      <p>如果您已安装Python，可以使用其内置的HTTP服务器：</p>
+      <h3>Python 3.x</h3>
+      <ol>
+        <li>打开命令提示符，进入wiki目录</li>
+        <li>运行：<code>python -m http.server 8000</code></li>
+        <li>在浏览器中访问：<code>http://localhost:8000</code></li>
+      </ol>
+      <h3>Python 2.x</h3>
+      <ol>
+        <li>打开命令提示符，进入wiki目录</li>
+        <li>运行：<code>python -m SimpleHTTPServer 8000</code></li>
+        <li>在浏览器中访问：<code>http://localhost:8000</code></li>
+      </ol>
+    </div>
+    
+    <div class="method">
+      <h2>方法3：在线版本</h2>
+      <p>您也可以直接访问在线版本的Wiki：</p>
+      <a href="https://mitonvae.github.io/MonsterFarm/wiki/" class="button" target="_blank">访问在线Wiki</a>
+    </div>
+    
+    <div class="note">
+      <p><strong>注意：</strong>由于浏览器安全限制，直接在本地打开index.html文件会导致404错误，因为JavaScript无法通过file://协议加载本地Markdown文件。使用上述方法之一来解决此问题。</p>
+    </div>
+  </div>
+</body>
+</html>
